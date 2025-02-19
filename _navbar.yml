@@ -1,0 +1,17 @@
+name: "rickhass.github.io"
+title: "Richard (Rick) Hass"
+type: inverse
+left:
+  - text: "About me"
+    menu:
+      - text: "Learn more about me"
+        href: ./aboutme.html
+  - text: "My Stuff"
+    menu:
+       - text: "R Tutorials"
+         href: ./RIndex.html
+       - text: "Research Supplements"
+         href: ./projects.html
+right:
+  - icon: fa-github fa-lg
+    href: https://github.com/rickhass/

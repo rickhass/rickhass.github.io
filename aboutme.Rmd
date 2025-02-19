@@ -1,0 +1,15 @@
+---
+title: "About Me"
+author: "RWH"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+I completed my PhD in the Brain and Cognitive Sciences cluster of the psychology department at Temple University. My current research focuses on applications of psychometrics, cognitive science, and data science to important issues in population health.
+
+Prior to my work in health research, I was very active in the cognitive science of problem solving and creativity. The lure of applied statistics in the health space lured me away, and it has been a great journey ever since. 

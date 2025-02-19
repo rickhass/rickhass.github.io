@@ -1,5 +1,5 @@
 ---
-title: "Linear Models with R"
+title: "R Tutorials"
 author: "RW Hass"
 date: "`r Sys.Date()`"
 output: html_document
@@ -16,3 +16,7 @@ Existing Tutorials:
 * [R Basics](https://rickhass.github.io/Rbasics.html)
 * [Basics of the lm syntax](https://rickhass.github.io/working_with_linear_models_R.html)
 * [Interactions in linear models](https://rickhass.github.io/InteractionExamples.html)
+* [Demo for Ordinary Least Squares](https://rickhass.github.io/Week3_logistic_Demo.html)
+* [Tutorial on Count Regression](https://rickhass.github.io/Week4_Count_demo.html)
+* [Generalized Linear Modeling Vignette](https://rickhass.github.io/Week5_GLM_diag_demo.html)
+* [Introduction to lme4](https://rickhass.github.io/Week7_lme4_intro.html)

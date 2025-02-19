@@ -1,0 +1,22 @@
+---
+title: ""
+output: 
+  html_document:
+    toc: FALSE
+---
+
+![](CHS_headshot.jpg)
+
+I am [Associate Professor of Population Health](https://www.jefferson.edu/academics/colleges-schools-institutes/population-health.html) and Program Director of the [PhD in Population Health Science](https://www.jefferson.edu/academics/colleges-schools-institutes/population-health/degrees-programs/population-health-science-phd.html) and [MS in Health Data Science](https://www.jefferson.edu/academics/colleges-schools-institutes/population-health/degrees-programs/health-data-science.html). I am a statistician, psychometrician, data scientist, and cognitive scientist studying patient and clinical outcomes assessment, EHR predictive models, and attitudes toward AI in medicine.
+
+This page contains code and tutorials for students and other researchers. You can find out more about me at my [Jefferson Webpage](https://www.jefferson.edu/academics/colleges-schools-institutes/population-health/administration-faculty-staff/faculty/hass.html)
+
+
+[![X](logo-black.png)](https://x.com/rw_hass)
+
+
+
+
+
+
+

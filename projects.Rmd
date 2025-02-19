@@ -1,0 +1,16 @@
+---
+title: "Research Supplements"
+author: "RWH"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Various recent project pages
+
+* [Academy Health 2024: Measurement Invariance of the HCAHPS tool across White and African American Patients](AcademyHealthCAHPSSupp.html)
+* [Digestive Disease Week 2024: Living Donor Liver Transplant for Hepatocellular Carcinoma in the Post ‘Median Meld Minus 3’ Era](LDLT_Digestive_Disease_Week.html)
+
