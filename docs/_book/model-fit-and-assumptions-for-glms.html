@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Model Fit and Assumptions for GLMs | Generalized Linear Mixed Models with R: A tutorial</title>
+  <meta name="description" content="5 Model Fit and Assumptions for GLMs | Generalized Linear Mixed Models with R: A tutorial" />
+  <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Model Fit and Assumptions for GLMs | Generalized Linear Mixed Models with R: A tutorial" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Model Fit and Assumptions for GLMs | Generalized Linear Mixed Models with R: A tutorial" />
+  
+  
+  
+
+<meta name="author" content="Rick Hass" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regression-with-counts-as-outcomes.html"/>
+<link rel="next" href="introducing-mixed-models-and-the-lme4-package.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Overview</a></li>
+<li class="chapter" data-level="1" data-path="r-basics.html"><a href="r-basics.html"><i class="fa fa-check"></i><b>1</b> R Basics</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="r-basics.html"><a href="r-basics.html#what-is-coding"><i class="fa fa-check"></i><b>1.1</b> What is “coding”</a></li>
+<li class="chapter" data-level="1.2" data-path="r-basics.html"><a href="r-basics.html#r-console-versus-the-rstudio-script"><i class="fa fa-check"></i><b>1.2</b> R Console versus the RStudio Script</a></li>
+<li class="chapter" data-level="1.3" data-path="r-basics.html"><a href="r-basics.html#working-with-data"><i class="fa fa-check"></i><b>1.3</b> Working with data</a></li>
+<li class="chapter" data-level="1.4" data-path="r-basics.html"><a href="r-basics.html#using-a-script-to-generate-data-and-computing-the-mean-and-standard-deviation"><i class="fa fa-check"></i><b>1.4</b> Using a script to generate data, and computing the mean and standard deviation</a></li>
+<li class="chapter" data-level="1.5" data-path="r-basics.html"><a href="r-basics.html#importing-data"><i class="fa fa-check"></i><b>1.5</b> Importing Data</a></li>
+<li class="chapter" data-level="1.6" data-path="r-basics.html"><a href="r-basics.html#reading-in-an-spss-file"><i class="fa fa-check"></i><b>1.6</b> Reading in an SPSS file</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="r-basics.html"><a href="r-basics.html#a-quick-note-on-indexing"><i class="fa fa-check"></i><b>1.6.1</b> A quick note on indexing</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="r-basics.html"><a href="r-basics.html#frequencies-and-contingency-tables"><i class="fa fa-check"></i><b>1.7</b> Frequencies and Contingency Tables</a></li>
+<li class="chapter" data-level="1.8" data-path="r-basics.html"><a href="r-basics.html#descriptive-statistics"><i class="fa fa-check"></i><b>1.8</b> Descriptive statistics</a>
+<ul>
+<li class="chapter" data-level="1.8.1" data-path="r-basics.html"><a href="r-basics.html#the-describe-function"><i class="fa fa-check"></i><b>1.8.1</b> The describe function</a></li>
+<li class="chapter" data-level="1.8.2" data-path="r-basics.html"><a href="r-basics.html#the-describeby-function"><i class="fa fa-check"></i><b>1.8.2</b> The describeBy function</a></li>
+<li class="chapter" data-level="1.8.3" data-path="r-basics.html"><a href="r-basics.html#computing-a-new-variable-and-adding-it-to-the-dataframe"><i class="fa fa-check"></i><b>1.8.3</b> Computing a new variable and adding it to the dataframe</a></li>
+</ul></li>
+<li class="chapter" data-level="1.9" data-path="r-basics.html"><a href="r-basics.html#visualizing-data"><i class="fa fa-check"></i><b>1.9</b> Visualizing Data</a>
+<ul>
+<li class="chapter" data-level="1.9.1" data-path="r-basics.html"><a href="r-basics.html#histograms-and-density-plots"><i class="fa fa-check"></i><b>1.9.1</b> Histograms and density plots</a></li>
+<li class="chapter" data-level="1.9.2" data-path="r-basics.html"><a href="r-basics.html#boxplots"><i class="fa fa-check"></i><b>1.9.2</b> Boxplots</a></li>
+<li class="chapter" data-level="1.9.3" data-path="r-basics.html"><a href="r-basics.html#scatterplots"><i class="fa fa-check"></i><b>1.9.3</b> Scatterplots</a></li>
+</ul></li>
+<li class="chapter" data-level="1.10" data-path="r-basics.html"><a href="r-basics.html#review"><i class="fa fa-check"></i><b>1.10</b> Review</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html"><i class="fa fa-check"></i><b>2</b> Ordinary Linear Regression</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#our-data"><i class="fa fa-check"></i><b>2.1</b> Our data</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#converting-from-numeric-to-factor"><i class="fa fa-check"></i><b>2.1.1</b> Converting from numeric to factor</a></li>
+<li class="chapter" data-level="2.1.2" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#confidence-intervals-v.-p-values"><i class="fa fa-check"></i><b>2.1.2</b> Confidence Intervals v. p-values</a></li>
+<li class="chapter" data-level="2.1.3" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#adding-interaction-terms"><i class="fa fa-check"></i><b>2.1.3</b> Adding interaction terms</a></li>
+<li class="chapter" data-level="2.1.4" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#interaction-model-for-gambling"><i class="fa fa-check"></i><b>2.1.4</b> Interaction model for Gambling</a></li>
+<li class="chapter" data-level="2.1.5" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#interaction-output"><i class="fa fa-check"></i><b>2.1.5</b> Interaction Output</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#anova-and-drop1-commands"><i class="fa fa-check"></i><b>2.2</b> ANOVA and drop1 commands</a></li>
+<li class="chapter" data-level="2.3" data-path="ordinary-linear-regression.html"><a href="ordinary-linear-regression.html#plots"><i class="fa fa-check"></i><b>2.3</b> Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>3</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="logistic-regression.html"><a href="logistic-regression.html#an-example-diabetes-risk-factors"><i class="fa fa-check"></i><b>3.1</b> An Example: Diabetes risk factors</a></li>
+<li class="chapter" data-level="3.2" data-path="logistic-regression.html"><a href="logistic-regression.html#model-discrimination-and-fit"><i class="fa fa-check"></i><b>3.2</b> Model Discrimination and Fit</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="logistic-regression.html"><a href="logistic-regression.html#roc-and-auroc"><i class="fa fa-check"></i><b>3.2.1</b> ROC and AUROC</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html"><i class="fa fa-check"></i><b>4</b> Regression with Counts as Outcomes</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#example-data-phmc-fruits-question"><i class="fa fa-check"></i><b>4.1</b> Example data: PHMC Fruits question</a></li>
+<li class="chapter" data-level="4.2" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#coefficients-in-poisson-models"><i class="fa fa-check"></i><b>4.2</b> Coefficients in Poisson Models</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#exponentiated-coefficients-interpretation"><i class="fa fa-check"></i><b>4.2.1</b> Exponentiated Coefficients Interpretation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#overdispersion-and-other-count-regression-models"><i class="fa fa-check"></i><b>4.3</b> Overdispersion and other count regression models</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#overdispersion-and-zero-inflation"><i class="fa fa-check"></i><b>4.3.1</b> Overdispersion and Zero-inflation</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="regression-with-counts-as-outcomes.html"><a href="regression-with-counts-as-outcomes.html#zero-inflated-models"><i class="fa fa-check"></i><b>4.4</b> Zero-inflated models</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html"><i class="fa fa-check"></i><b>5</b> Model Fit and Assumptions for GLMs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#model-checking-and-diagnostics-in-ordinary-least-squares"><i class="fa fa-check"></i><b>5.1</b> Model Checking and Diagnostics in Ordinary Least Squares</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#residuals-v.-fitted-values"><i class="fa fa-check"></i><b>5.1.1</b> Residuals v. Fitted Values</a></li>
+<li class="chapter" data-level="5.1.2" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#normalty-of-residuals"><i class="fa fa-check"></i><b>5.1.2</b> Normalty of residuals</a></li>
+<li class="chapter" data-level="5.1.3" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#leverage"><i class="fa fa-check"></i><b>5.1.3</b> Leverage</a></li>
+<li class="chapter" data-level="5.1.4" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#influence"><i class="fa fa-check"></i><b>5.1.4</b> Influence</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#model-checking-and-diagnostics-in-logistic-regression"><i class="fa fa-check"></i><b>5.2</b> Model Checking and Diagnostics in Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#hosmer-lemeshow-test"><i class="fa fa-check"></i><b>5.2.1</b> Hosmer-Lemeshow Test</a></li>
+<li class="chapter" data-level="5.2.2" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#nagelkerkes-pseudo-r-squared"><i class="fa fa-check"></i><b>5.2.2</b> Nagelkerke’s pseudo R-squared</a></li>
+<li class="chapter" data-level="5.2.3" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#residuals-and-leverages"><i class="fa fa-check"></i><b>5.2.3</b> Residuals and leverages</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="model-fit-and-assumptions-for-glms.html"><a href="model-fit-and-assumptions-for-glms.html#summary"><i class="fa fa-check"></i><b>5.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html"><i class="fa fa-check"></i><b>6</b> Introducing mixed-models and the lme4 package</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#options-in-r"><i class="fa fa-check"></i><b>6.1</b> Options in R</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#why-lme4"><i class="fa fa-check"></i><b>6.1.1</b> Why lme4?</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#a-possible-workflow"><i class="fa fa-check"></i><b>6.2</b> A possible workflow</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#high-school-and-beyond"><i class="fa fa-check"></i><b>6.2.1</b> High School and Beyond</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#model-1-one-way-random-effects-anova-using-reml"><i class="fa fa-check"></i><b>6.3</b> Model 1: one-way random-effects ANOVA using REML</a></li>
+<li class="chapter" data-level="6.4" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#quasi-anova-estimator"><i class="fa fa-check"></i><b>6.4</b> Quasi-ANOVA estimator</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#unrestricted-maximum-likelihood"><i class="fa fa-check"></i><b>6.4.1</b> (unrestricted) Maximum Likelihood</a></li>
+<li class="chapter" data-level="6.4.2" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#intraclass-correlation"><i class="fa fa-check"></i><b>6.4.2</b> Intraclass correlation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#bootstrapped-confidence-intervals"><i class="fa fa-check"></i><b>6.5</b> Bootstrapped confidence intervals</a></li>
+<li class="chapter" data-level="6.6" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#linear-mixed-effects"><i class="fa fa-check"></i><b>6.6</b> Linear mixed-effects</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="introducing-mixed-models-and-the-lme4-package.html"><a href="introducing-mixed-models-and-the-lme4-package.html#random-effects-estimates"><i class="fa fa-check"></i><b>6.6.1</b> Random effects estimates</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html"><i class="fa fa-check"></i><b>7</b> Mixed models as Hierarchical Linear Models</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#high-school-and-beyond-data"><i class="fa fa-check"></i><b>7.1</b> High School and Beyond Data</a></li>
+<li class="chapter" data-level="7.2" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#model-1-unconditional-model"><i class="fa fa-check"></i><b>7.2</b> Model 1: unconditional model</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#unconditional-icc"><i class="fa fa-check"></i><b>7.2.1</b> Unconditional ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#means-as-outcomes-binary-predictor"><i class="fa fa-check"></i><b>7.3</b> Means as outcomes: Binary Predictor</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#means-as-outcomes-continuous-predictor"><i class="fa fa-check"></i><b>7.3.1</b> Means as outcomes: continuous predictor</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#multiple-hierarchical-linear-regression"><i class="fa fa-check"></i><b>7.4</b> Multiple hierarchical linear regression</a></li>
+<li class="chapter" data-level="7.5" data-path="mixed-models-as-hierarchical-linear-models.html"><a href="mixed-models-as-hierarchical-linear-models.html#plotting-predictor-effects"><i class="fa fa-check"></i><b>7.5</b> Plotting predictor effects</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html"><i class="fa fa-check"></i><b>8</b> More on Hierarchical Linear Models</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#overview-1"><i class="fa fa-check"></i><b>8.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#load-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Load the data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#random-coefficients-model"><i class="fa fa-check"></i><b>8.2</b> Random Coefficients model</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#visualizing-the-within-school-slopes"><i class="fa fa-check"></i><b>8.2.1</b> Visualizing the within-school slopes</a></li>
+<li class="chapter" data-level="8.2.2" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#fitting-the-random-coefficients-2-level-model"><i class="fa fa-check"></i><b>8.2.2</b> Fitting the Random Coefficients 2-level model</a></li>
+<li class="chapter" data-level="8.2.3" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#adding-additional-level-1-predictors-to-the-random-coefficients-model"><i class="fa fa-check"></i><b>8.2.3</b> Adding additional level-1 predictors to the random coefficients model</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#intercepts-and-slopes-as-outcomes"><i class="fa fa-check"></i><b>8.3</b> Intercepts and Slopes as Outcomes</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#interactions-and-the-iso-model"><i class="fa fa-check"></i><b>8.3.1</b> Interactions and the ISO model</a></li>
+<li class="chapter" data-level="8.3.2" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#mean-ses-and-student-ses"><i class="fa fa-check"></i><b>8.3.2</b> Mean SES and Student SES</a></li>
+<li class="chapter" data-level="8.3.3" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#sector-and-student-ses"><i class="fa fa-check"></i><b>8.3.3</b> Sector and Student SES</a></li>
+<li class="chapter" data-level="8.3.4" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#visualizing-the-mean-ses-effect"><i class="fa fa-check"></i><b>8.3.4</b> Visualizing the mean SES effect</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#model-comparison-with-likelihood-ratios-fixed-and-random"><i class="fa fa-check"></i><b>8.4</b> Model comparison with Likelihood Ratios: Fixed and Random</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#example-1-lrt-for-fixed-effects"><i class="fa fa-check"></i><b>8.4.1</b> Example 1: LRT for fixed effects</a></li>
+<li class="chapter" data-level="8.4.2" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#example-2-lrt-for-random-effects"><i class="fa fa-check"></i><b>8.4.2</b> Example 2: LRT for random effects</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="more-on-hierarchical-linear-models.html"><a href="more-on-hierarchical-linear-models.html#diagnostics"><i class="fa fa-check"></i><b>8.5</b> Diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html"><i class="fa fa-check"></i><b>9</b> Using lme4 to fit MLM to longitudinal data</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#data-description-average-reaction-time-per-day-for-subjects-in-a-sleep-deprivation-study-belenky-et-al.-2003"><i class="fa fa-check"></i><b>9.1</b> Data description: average reaction time per day for subjects in a sleep deprivation study (Belenky et al. 2003)</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#visualization-of-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Visualization of the data</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#fitting-the-level-1-model"><i class="fa fa-check"></i><b>9.2</b> Fitting the level-1 model</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#model-equations"><i class="fa fa-check"></i><b>9.2.1</b> Model Equations</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#model-building"><i class="fa fa-check"></i><b>9.3</b> Model building</a></li>
+<li class="chapter" data-level="9.4" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#model-comparison-and-testing"><i class="fa fa-check"></i><b>9.4</b> Model comparison and testing</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#option-1-using-confidence-intervals"><i class="fa fa-check"></i><b>9.4.1</b> Option 1: using confidence intervals</a></li>
+<li class="chapter" data-level="9.4.2" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#tests"><i class="fa fa-check"></i><b>9.4.2</b> Tests</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#quadratic-model-with-lmer"><i class="fa fa-check"></i><b>9.5</b> Quadratic model with lmer</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#a-note-on-quadratic-terms"><i class="fa fa-check"></i><b>9.5.1</b> A note on quadratic terms</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#summary-of-the-sleepstudy-analysis"><i class="fa fa-check"></i><b>9.6</b> Summary of the sleepstudy analysis</a></li>
+<li class="chapter" data-level="9.7" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#preview-of-the-blackmore-data-used-for-assignment-7b"><i class="fa fa-check"></i><b>9.7</b> Preview of the Blackmore data used for Assignment 7b</a>
+<ul>
+<li class="chapter" data-level="9.7.1" data-path="using-lme4-to-fit-mlm-to-longitudinal-data.html"><a href="using-lme4-to-fit-mlm-to-longitudinal-data.html#a-note-on-the-age-variable-in-blackmore"><i class="fa fa-check"></i><b>9.7.1</b> A note on the age variable in Blackmore</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html"><i class="fa fa-check"></i><b>10</b> Longitudinal models with upper-level predictors</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#overview-2"><i class="fa fa-check"></i><b>10.1</b> Overview</a></li>
+<li class="chapter" data-level="10.2" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#part-1-intercepts-and-slopes-as-outcomes"><i class="fa fa-check"></i><b>10.2</b> Part 1: Intercepts and Slopes as Outcomes</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#a-short-tutorial-on-ggplot2"><i class="fa fa-check"></i><b>10.2.1</b> A short tutorial on ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#adding-level-2-predictors"><i class="fa fa-check"></i><b>10.3</b> Adding level 2 predictors</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#transforming-the-exercise-variable"><i class="fa fa-check"></i><b>10.3.1</b> Transforming the Exercise Variable</a></li>
+<li class="chapter" data-level="10.3.2" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#steps-1-and-2"><i class="fa fa-check"></i><b>10.3.2</b> Steps 1 and 2:</a></li>
+<li class="chapter" data-level="10.3.3" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#step-3"><i class="fa fa-check"></i><b>10.3.3</b> Step 3:</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#summary-1"><i class="fa fa-check"></i><b>10.4</b> Summary</a></li>
+<li class="chapter" data-level="10.5" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#adding-level-2-explanatory-variables"><i class="fa fa-check"></i><b>10.5</b> Adding Level-2 Explanatory variables</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#visualizing-the-transformed-data"><i class="fa fa-check"></i><b>10.5.1</b> Visualizing the transformed data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#time-dependent-covariates"><i class="fa fa-check"></i><b>10.6</b> Time dependent covariates</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#level-1-time-dependent-sports-predictor"><i class="fa fa-check"></i><b>10.6.1</b> Level-1: Time-dependent sports predictor</a></li>
+<li class="chapter" data-level="10.6.2" data-path="longitudinal-models-with-upper-level-predictors.html"><a href="longitudinal-models-with-upper-level-predictors.html#level-2-participant-level-indicator-of-sports-participation"><i class="fa fa-check"></i><b>10.6.2</b> Level-2: Participant-level indicator of sports participation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="multilevel-logistic-regression.html"><a href="multilevel-logistic-regression.html"><i class="fa fa-check"></i><b>11</b> Multilevel logistic regression</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="multilevel-logistic-regression.html"><a href="multilevel-logistic-regression.html#unconditional-model"><i class="fa fa-check"></i><b>11.1</b> Unconditional model</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="multilevel-logistic-regression.html"><a href="multilevel-logistic-regression.html#fitting-the-model"><i class="fa fa-check"></i><b>11.1.1</b> Fitting the model</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="multilevel-logistic-regression.html"><a href="multilevel-logistic-regression.html#conditional-model"><i class="fa fa-check"></i><b>11.2</b> Conditional model</a></li>
+<li class="chapter" data-level="11.3" data-path="multilevel-logistic-regression.html"><a href="multilevel-logistic-regression.html#interpreting-odds-ratios"><i class="fa fa-check"></i><b>11.3</b> Interpreting odds ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html"><i class="fa fa-check"></i><b>12</b> MLM v. GEE for Binary Outcomes</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#overview-3"><i class="fa fa-check"></i><b>12.1</b> Overview</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#dataset"><i class="fa fa-check"></i><b>12.1.1</b> Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#hlm-model"><i class="fa fa-check"></i><b>12.2</b> HLM Model</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#interpreting-odds-ratios-1"><i class="fa fa-check"></i><b>12.2.1</b> Interpreting odds ratios</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#population-average-model-with-gee"><i class="fa fa-check"></i><b>12.3</b> Population Average Model with GEE</a></li>
+<li class="chapter" data-level="12.4" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#hlm-with-level-2-predictors"><i class="fa fa-check"></i><b>12.4</b> HLM with level-2 predictors</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#random-slopes-1"><i class="fa fa-check"></i><b>12.4.1</b> Random slopes</a></li>
+<li class="chapter" data-level="12.4.2" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#level-2-predictors"><i class="fa fa-check"></i><b>12.4.2</b> Level 2 predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#compare-to-gee"><i class="fa fa-check"></i><b>12.5</b> Compare to GEE</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="mlm-v.-gee-for-binary-outcomes.html"><a href="mlm-v.-gee-for-binary-outcomes.html#visualizing-res"><i class="fa fa-check"></i><b>12.5.1</b> Visualizing REs</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Generalized Linear Mixed Models with R: A tutorial</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="model-fit-and-assumptions-for-glms" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Model Fit and Assumptions for GLMs<a href="model-fit-and-assumptions-for-glms.html#model-fit-and-assumptions-for-glms" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Two general kinds of approaches, both are important!</p>
+<ol style="list-style-type: decimal">
+<li>Detecting single cases or a small group of cases that are affecting the overall fit or do not seem to go with the rest of the data</li>
+</ol>
+<ul>
+<li>Outlier detection, influence, leverage</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Checking model assumptions</li>
+</ol>
+<ul>
+<li>Structural form of the model: do we have the right set of predictors, do they need to be transformed?</li>
+<li>Stochastic or random form: eg., do residuals conform to model assumptions</li>
+</ul>
+<p>We’ll step through this for Ordinary Linear Regression and Logistic Regression, as those are the two approaches that we’ll continue to deal with in the course</p>
+<p>Remember:</p>
+<blockquote>
+<p>It is virtually impossible to verify that a given model is exactly correct. The purpose of the diagnostics is more to check whether the model is not grossly wrong. Indeed, a successful data analyst should pay more attention to avoiding big mistakes than optimizing the fit. (Faraway, p. 14)</p>
+</blockquote>
+<div id="model-checking-and-diagnostics-in-ordinary-least-squares" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Model Checking and Diagnostics in Ordinary Least Squares<a href="model-fit-and-assumptions-for-glms.html#model-checking-and-diagnostics-in-ordinary-least-squares" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As we have seen, for ordinary linear models, the <code>plot</code> function returns very helpful output. Let’s take a look at it again for the <code>teengamb</code> data that is in the <code>faraway</code> package.</p>
+<p>As a reminder:</p>
+<ul>
+<li>Data has 47 rows and 5 columns. It was a from a survey studying teenage gambling in the UK</li>
+<li>Variables:
+<ul>
+<li>sex: 0 = male, 1 = female</li>
+<li>status: Socioeconomic status score based on parents’ occupation</li>
+<li>income: in pounds per week</li>
+<li>verbal: verbal score in words out of 12 correctly defined</li>
+<li>gamble: expenditure on gambling in pounds per year</li>
+</ul></li>
+</ul>
+<p>Here, we’ll change <code>sex</code> to a factor and have a look at the results again</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="model-fit-and-assumptions-for-glms.html#cb167-1" tabindex="-1"></a>teengamb<span class="sc">$</span>sex_fac <span class="ot">&lt;-</span> <span class="fu">factor</span>(teengamb<span class="sc">$</span>sex, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>))</span>
+<span id="cb167-2"><a href="model-fit-and-assumptions-for-glms.html#cb167-2" tabindex="-1"></a><span class="do">## model with numeric variable</span></span>
+<span id="cb167-3"><a href="model-fit-and-assumptions-for-glms.html#cb167-3" tabindex="-1"></a>gamb.mod.fac <span class="ot">&lt;-</span> <span class="fu">lm</span>(gamble <span class="sc">~</span> sex_fac <span class="sc">+</span> status <span class="sc">+</span> income <span class="sc">+</span> verbal, <span class="at">data =</span> teengamb)</span>
+<span id="cb167-4"><a href="model-fit-and-assumptions-for-glms.html#cb167-4" tabindex="-1"></a></span>
+<span id="cb167-5"><a href="model-fit-and-assumptions-for-glms.html#cb167-5" tabindex="-1"></a><span class="fu">summary</span>(gamb.mod.fac)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = gamble ~ sex_fac + status + income + verbal, data = teengamb)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -51.082 -11.320  -1.451   9.452  94.252 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    22.55565   17.19680   1.312   0.1968    
+## sex_facFemale -22.11833    8.21111  -2.694   0.0101 *  
+## status          0.05223    0.28111   0.186   0.8535    
+## income          4.96198    1.02539   4.839 1.79e-05 ***
+## verbal         -2.95949    2.17215  -1.362   0.1803    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 22.69 on 42 degrees of freedom
+## Multiple R-squared:  0.5267, Adjusted R-squared:  0.4816 
+## F-statistic: 11.69 on 4 and 42 DF,  p-value: 1.815e-06</code></pre>
+<p>We can also see that <code>drop1</code> will utilize the residual <span class="math inline">\(SS\)</span> from each model, which relates to model deviance</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="model-fit-and-assumptions-for-glms.html#cb169-1" tabindex="-1"></a><span class="fu">drop1</span>(gamb.mod.fac, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## gamble ~ sex_fac + status + income + verbal
+##         Df Sum of Sq   RSS    AIC F value    Pr(&gt;F)    
+## &lt;none&gt;               21624 298.18                      
+## sex_fac  1    3735.8 25360 303.67  7.2561   0.01011 *  
+## status   1      17.8 21642 296.21  0.0345   0.85349    
+## income   1   12056.2 33680 317.00 23.4169 1.792e-05 ***
+## verbal   1     955.7 22580 298.21  1.8563   0.18031    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>But let’s see the residual plots again. This time we’ll go in order</p>
+<div id="residuals-v.-fitted-values" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Residuals v. Fitted Values<a href="model-fit-and-assumptions-for-glms.html#residuals-v.-fitted-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First, we have the residuals v. the fitted values. For OLS, the residuals are the raw residuals</p>
+<p>That is:</p>
+<p><span class="math display">\[
+\text{resid: } y_{i} - \hat{y}_{i}\\
+\text{fitted: } \hat{y}_{i} = 22.56 - 22.12(Female_{i}) + 0.05(Status_{i}) + 4.96(Income_{i}) - 2.96(Verbal_{i})
+\]</span></p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="model-fit-and-assumptions-for-glms.html#cb171-1" tabindex="-1"></a><span class="fu">plot</span>(gamb.mod.fac, <span class="at">which =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/resid1-1.png" width="672" /></p>
+<p>We see some evidence that the variance of the residuals changes as predicted values increase. This violates the homoskedasticity assumption, and affects standard errors</p>
+</div>
+<div id="normalty-of-residuals" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Normalty of residuals<a href="model-fit-and-assumptions-for-glms.html#normalty-of-residuals" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This assumption is only relevant for GLMs with the Gaussian random component. We don’t expect normally distributed residuals for Poisson, Logistic, etc.</p>
+<p>Also, with larger datasets, if the normality is less crucial as inference can still be robust. Like with other plots, it takes experience to interpret these and know what to do about them.</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="model-fit-and-assumptions-for-glms.html#cb172-1" tabindex="-1"></a><span class="fu">plot</span>(gamb.mod.fac, <span class="at">which =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/resid2-1.png" width="672" /></p>
+<p>We can see that for most responses, things look good, but cases 24, 36, and 39 appear again!</p>
+</div>
+<div id="leverage" class="section level3 hasAnchor" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Leverage<a href="model-fit-and-assumptions-for-glms.html#leverage" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s take a closer look at leverage. We do so using the so-called “hat matrix” (because it puts a “hat” on <span class="math inline">\(y\)</span>):</p>
+<p>First, define fitted values using matrix notation:</p>
+<p><span class="math display">\[
+\hat{y} = \textbf{X}\hat{\beta} \\
+      = \textbf{X}(\textbf{X}^{T}\textbf{X})^{-1}\textbf{X}^T\textbf{y} \\
+      = \textbf{H}\textbf{y}
+\]</span></p>
+<p>The first part is <span class="math inline">\(\textbf{H}\)</span> and the diagonal values <span class="math inline">\(h_{i} = \textbf{H}_{ii}\)</span> are the <em>leverages</em></p>
+<p>We define the variance of the residuals: <span class="math inline">\(\text{var}(\hat{\epsilon}_{i}) = \sigma^{2}(1-h_{i})\)</span></p>
+<p>So large values of <span class="math inline">\(h_{i}\)</span> exert <em>leverage</em> since they tend to make the variance small and subsequently to “force” the fit of the regression line close to that particular <span class="math inline">\(y_{i}\)</span></p>
+</div>
+<div id="influence" class="section level3 hasAnchor" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Influence<a href="model-fit-and-assumptions-for-glms.html#influence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It’s hard to look at the leverages so Cook defined a statistic using <strong>standardized residuals</strong>, <span class="math inline">\(r_i = \epsilon / \text{SE}(\epsilon)\)</span> that we’ll call Cook’s Distance:</p>
+<p><span class="math display">\[
+D_{i}= \frac{(\hat{y}-\hat{y}_{(i)})^{T}(\hat{y}-\hat{y}_{(i)})}{p\sigma^{2}} = \frac{1}{p}r^{2}_{i}\frac{h_{i}}{1-h_{i}}
+\]</span></p>
+<p>It basically represents a scaled <em>change of fit</em> when a particular case <span class="math inline">\(y_{(i)}\)</span> is dropped from the dataset.</p>
+<p>Below we have the leverages and standardized residuals. Cook’s distances are shown as contour lines.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="model-fit-and-assumptions-for-glms.html#cb173-1" tabindex="-1"></a><span class="fu">plot</span>(gamb.mod.fac, <span class="at">which =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/leverage-1.png" width="672" /></p>
+<p>There’s that case 24 again! Let’s check it out more closely along with a couple of others.</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="model-fit-and-assumptions-for-glms.html#cb174-1" tabindex="-1"></a>teengamb[<span class="fu">cooks.distance</span>(gamb.mod.fac) <span class="sc">&gt;</span> .<span class="dv">1</span>, ]</span></code></pre></div>
+<pre><code>##    sex status income verbal gamble sex_fac
+## 24   0     27     10      4    156    Male
+## 39   0     51     10      6      6    Male</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="model-fit-and-assumptions-for-glms.html#cb176-1" tabindex="-1"></a><span class="fu">predict</span>(gamb.mod.fac, <span class="at">newdata =</span> teengamb[<span class="fu">c</span>(<span class="dv">24</span>,<span class="dv">39</span>), ])</span></code></pre></div>
+<pre><code>##       24       39 
+## 61.74778 57.08241</code></pre>
+<p>So we see that with case 24, we’re actually under predicting, and with case 39 we’re way over. These are both males with the same income level and similar verbal scores, but of different statuses.</p>
+<p>What we do with these cases varies in different situations. This is a real dataset and these are plausible values of the covariates, so we would probably leave it alone. However, this is also a small dataset, so we might like to see how things shake out in a follow-up study.</p>
+</div>
+</div>
+<div id="model-checking-and-diagnostics-in-logistic-regression" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Model Checking and Diagnostics in Logistic Regression<a href="model-fit-and-assumptions-for-glms.html#model-checking-and-diagnostics-in-logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we move to the logistic regression environment, we now have more complicated residuals, but the process is very similar, with a few twists.</p>
+<p>Let’s look at the birthweight data that you analyzed for HW 3</p>
+<pre><code>## &#39;data.frame&#39;:    189 obs. of  10 variables:
+##  $ low  : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ age  : int  19 33 20 21 18 21 22 17 29 26 ...
+##  $ lwt  : int  182 155 105 108 107 124 118 103 123 113 ...
+##  $ race : int  2 3 1 1 1 3 1 3 1 1 ...
+##  $ smoke: int  0 0 1 1 1 0 0 0 1 1 ...
+##  $ ptl  : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ ht   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ ui   : int  1 0 0 1 1 0 0 0 0 0 ...
+##  $ ftv  : int  0 3 1 2 0 0 1 1 1 0 ...
+##  $ bwt  : int  2523 2551 2557 2594 2600 2622 2637 2637 2663 2665 ...</code></pre>
+<p>We’ll go ahead and model presence of low birthweight using the mother’s race, smoking status, mother’s weight at last menstrual period (<code>lwt</code>) and the number of physician visits during the first trimester (<code>ftv</code>)</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="model-fit-and-assumptions-for-glms.html#cb179-1" tabindex="-1"></a><span class="co"># full model</span></span>
+<span id="cb179-2"><a href="model-fit-and-assumptions-for-glms.html#cb179-2" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(low <span class="sc">~</span> race_fac <span class="sc">+</span> smoke_fac <span class="sc">+</span> lwt <span class="sc">+</span> ftv, <span class="at">data =</span> birthwt, <span class="at">family =</span> binomial)</span>
+<span id="cb179-3"><a href="model-fit-and-assumptions-for-glms.html#cb179-3" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = low ~ race_fac + smoke_fac + lwt + ftv, family = binomial, 
+##     data = birthwt)
+## 
+## Coefficients:
+##                  Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)     -0.103559   0.886013  -0.117  0.90695   
+## race_facblack    1.284937   0.511773   2.511  0.01205 * 
+## race_facother    0.963552   0.415185   2.321  0.02030 * 
+## smoke_facsmoker  1.055738   0.379667   2.781  0.00542 **
+## lwt             -0.013106   0.006392  -2.051  0.04031 * 
+## ftv             -0.025504   0.161963  -0.157  0.87488   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 234.67  on 188  degrees of freedom
+## Residual deviance: 214.99  on 183  degrees of freedom
+## AIC: 226.99
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="model-fit-and-assumptions-for-glms.html#cb181-1" tabindex="-1"></a><span class="do">## odds ratios and 95% CI&#39;s</span></span>
+<span id="cb181-2"><a href="model-fit-and-assumptions-for-glms.html#cb181-2" tabindex="-1"></a>(OR_CI <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="st">&quot;OR&quot;</span> <span class="ot">=</span> <span class="fu">exp</span>(<span class="fu">coef</span>(mod3)), <span class="fu">exp</span>(<span class="fu">confint</span>(mod3))))</span></code></pre></div>
+<pre><code>## Waiting for profiling to be done...</code></pre>
+<pre><code>##                        OR     2.5 %     97.5 %
+## (Intercept)     0.9016227 0.1660422  5.4902084
+## race_facblack   3.6144402 1.3289453 10.0493156
+## race_facother   2.6209902 1.1754754  6.0409987
+## smoke_facsmoker 2.8740954 1.3837707  6.1837182
+## lwt             0.9869793 0.9739259  0.9988046
+## ftv             0.9748189 0.7003830  1.3293647</code></pre>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="model-fit-and-assumptions-for-glms.html#cb184-1" tabindex="-1"></a><span class="fu">drop1</span>(mod3, <span class="at">test =</span> <span class="st">&quot;Chi&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## low ~ race_fac + smoke_fac + lwt + ftv
+##           Df Deviance    AIC    LRT Pr(&gt;Chi)   
+## &lt;none&gt;         214.99 226.99                   
+## race_fac   2   224.09 232.09 9.1004 0.010565 * 
+## smoke_fac  1   223.08 233.08 8.0891 0.004453 **
+## lwt        1   219.68 229.68 4.6926 0.030293 * 
+## ftv        1   215.01 225.01 0.0249 0.874558   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>This is a large enough dataset that we might be able to use the residual deviance in Pearson’s <span class="math inline">\(X^{2}\)</span> but that’s not usually done in logistic regression. Instead, we’ll compute two fit statistics before looking at the diagnostic plots.</p>
+<p>Note, we already produced an ROC plot as well as computing the area under the curve, which also help with testing model fit, so we’ll skip those here.</p>
+<div id="hosmer-lemeshow-test" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Hosmer-Lemeshow Test<a href="model-fit-and-assumptions-for-glms.html#hosmer-lemeshow-test" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Hosmer and Lemeshow (e.g., 2013) devised a method for checking the fit of a logistic regression model by a Chi-square like procedure of examining how close predicted probabilities are to the observations in the dataset:</p>
+<p><span class="math display">\[
+X^{2}_{HL} = \sum_{j=1}^{J}\frac{(y_{j}-m_{j}\hat{p}_{j})}{m_{j}\hat{p}_{j}(1-\hat{p})}
+\]</span>
+It has an approximate <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(J - 1\)</span> degrees of freedom. One issue is choosing the bin size. Many programs default to <span class="math inline">\(J = 10\)</span>. We’ll use the <code>hoslem</code> function from the</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="model-fit-and-assumptions-for-glms.html#cb186-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> mod3<span class="sc">$</span>y <span class="co"># the y-values</span></span>
+<span id="cb186-2"><a href="model-fit-and-assumptions-for-glms.html#cb186-2" tabindex="-1"></a>y_hat <span class="ot">&lt;-</span> mod3<span class="sc">$</span>fitted.values <span class="co"># the predicted probabilities</span></span>
+<span id="cb186-3"><a href="model-fit-and-assumptions-for-glms.html#cb186-3" tabindex="-1"></a></span>
+<span id="cb186-4"><a href="model-fit-and-assumptions-for-glms.html#cb186-4" tabindex="-1"></a>(HL_test <span class="ot">&lt;-</span> ResourceSelection<span class="sc">::</span><span class="fu">hoslem.test</span>(<span class="at">x =</span> y, <span class="at">y =</span> y_hat))</span></code></pre></div>
+<pre><code>## 
+##  Hosmer and Lemeshow goodness of fit (GOF) test
+## 
+## data:  y, y_hat
+## X-squared = 7.8931, df = 8, p-value = 0.444</code></pre>
+<p>We might also choose to make a calibration plot, which is a little beyond the scope of the course, but the test suggest that we’d find our predictions in line with the observed proportion of “ones” at different levels of predicted values.</p>
+</div>
+<div id="nagelkerkes-pseudo-r-squared" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Nagelkerke’s pseudo R-squared<a href="model-fit-and-assumptions-for-glms.html#nagelkerkes-pseudo-r-squared" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another measure that approaches fit, but from a different perspective is the Nagelkerke <span class="math inline">\(R^{2}\)</span></p>
+<p>We have the equation in our older notes, so we’ll just point out that it is a function of the likelihoods of our model and a null model, and can be computed using the model deviances. It will never be as high as in ordinary linear regression due to the nature of binary data, but it is helpful for comparing different logistic models.</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="model-fit-and-assumptions-for-glms.html#cb188-1" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">-</span><span class="fu">exp</span>((mod3<span class="sc">$</span>deviance <span class="sc">-</span> mod3<span class="sc">$</span>null.deviance)<span class="sc">/</span><span class="dv">189</span>)) <span class="sc">/</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">exp</span>(<span class="sc">-</span>mod3<span class="sc">$</span>null.deviance<span class="sc">/</span><span class="dv">189</span>)) </span></code></pre></div>
+<pre><code>## [1] 0.1390815</code></pre>
+</div>
+<div id="residuals-and-leverages" class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Residuals and leverages<a href="model-fit-and-assumptions-for-glms.html#residuals-and-leverages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Raw residuals are not as helpful in logistic regression, since they can only take one of two values for any fixed set of predictor values.</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="model-fit-and-assumptions-for-glms.html#cb190-1" tabindex="-1"></a><span class="fu">plot</span>(mod3, <span class="at">which =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/logresd1-1.png" width="672" /></p>
+<p>Deviance residuals can be plotted, but they require a binned plot, which is not ready made, and requires some coding. See p. 36-37 in Faraway for more. Those plots need not have mean of zero for residuals, but we would like to see constant variance.</p>
+<p>We can, however, produce a kind of QQ plot for the leverage values. We’ll use the <code>halfnorm</code> function from <code>faraway</code> to plot the leverages and pick out any extreme values:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="model-fit-and-assumptions-for-glms.html#cb191-1" tabindex="-1"></a><span class="fu">halfnorm</span>(<span class="fu">hatvalues</span>(mod3))</span></code></pre></div>
+<p><img src="_main_files/figure-html/halfnorm-1.png" width="672" /></p>
+<p>We see that case 68 has quite a lot of leverage, and for comparison, we’ll also look at case 167</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="model-fit-and-assumptions-for-glms.html#cb192-1" tabindex="-1"></a>birthwt[<span class="fu">c</span>(<span class="st">&quot;68&quot;</span>,<span class="st">&quot;167&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;race_fac&quot;</span>,<span class="st">&quot;smoke_fac&quot;</span>,<span class="st">&quot;lwt&quot;</span>,<span class="st">&quot;ftv&quot;</span>)]</span></code></pre></div>
+<pre><code>##     low race_fac smoke_fac lwt ftv
+## 68    1    white    smoker 120   3
+## 167   0    white    smoker 135   0</code></pre>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="model-fit-and-assumptions-for-glms.html#cb194-1" tabindex="-1"></a><span class="fu">predict</span>(mod3, <span class="at">newdata =</span> birthwt[<span class="fu">c</span>(<span class="st">&quot;68&quot;</span>,<span class="st">&quot;167&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;race_fac&quot;</span>,<span class="st">&quot;smoke_fac&quot;</span>,<span class="st">&quot;lwt&quot;</span>,<span class="st">&quot;ftv&quot;</span>)], <span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<pre><code>##        68       167 
+## 0.3324594 0.3063656</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="model-fit-and-assumptions-for-glms.html#cb196-1" tabindex="-1"></a><span class="fu">summary</span>(birthwt<span class="sc">$</span>ftv)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.0000  0.0000  0.7937  1.0000  6.0000</code></pre>
+<p>We see that the median number of first trimester visits is 0 but that case 68 had 3. The other values aren’t so extreme. The two cases have similar predicted probabilities, however, so it’s not clear what’s going on.</p>
+<p>Either way, the calibration may be a bit off for folks with higher numbers of <code>ftv</code></p>
+</div>
+</div>
+<div id="summary" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Summary<a href="model-fit-and-assumptions-for-glms.html#summary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Regression diagonistics are part of “model criticism” where we try to figure out if our model is too wrong or bad to be of any use. We hope to find that it will be good enough and-or that perhaps there are ways to improve it.</p></li>
+<li><p>This process is very straightforward with ordinary linear regression, but in generalized linear modeling, specialized procedures exist for the discrete outcomes models</p></li>
+<li><p>We’ll return to these diagonstic procedures when we start to fit random-effects and fixed-effects models</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regression-with-counts-as-outcomes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introducing-mixed-models-and-the-lme4-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
